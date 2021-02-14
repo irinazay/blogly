@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>
+    Blogly &ndash; {% block title %}{% endblock %}
+  </title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<nav>
+  <ul class="navig">
+    <li>
+    <a id="blogly_nav" href="/">Blogly</a>
+    </li>
+  </ul>
+  <ul class="navig">
+    <li>
+      <a href="/users" id="users">Users</a>
+    </li>
+  </ul>
+  <ul class="navig" id="item_3">
+    <li>
+      <a href="/users/new" id="add_user">Add User</a>
+    </li>
+  </ul>
+
+</nav>
+<div class="content">
+  {% block content %}
+  <!-- put the content here -->
+  {% endblock %}
+</div>
+</body>
+</html>

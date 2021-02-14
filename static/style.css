@@ -1,0 +1,99 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+.content {
+  margin-top: 50px;
+  margin-left: 200px;
+}
+
+input {
+  padding: 5px;
+  border-radius: 1px;
+  border: solid 1px lightgray;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  min-width: 20%;
+}
+
+button {
+  margin-top: 5px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(151, 151, 151);
+}
+
+#cancel_btn,
+#add_user_btn {
+  margin-top: 5px;
+  padding: 8.5px 15px;
+  margin-bottom: 20px;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(151, 151, 151);
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  background-color: rgb(49, 49, 49);
+}
+
+.navig {
+  padding: 15px;
+}
+
+h1 {
+  margin-bottom: 15px;
+}
+
+nav a {
+  color: rgb(151, 151, 151);
+  text-decoration: none;
+  font-size: 18px;
+}
+
+#blogly_nav {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.users_list:hover {
+  color: rgb(35, 130, 240);
+  text-decoration: underline;
+}
+.users_list {
+  text-decoration: none;
+  color: rgb(35, 130, 240);
+}
+.add_user_btn {
+  margin-top: 20px;
+}
+
+#add_user {
+  margin-top: 5px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(151, 151, 151);
+  text-decoration: none;
+  color: white;
+}
+
+#item_3 {
+  margin-left: auto;
+}
+
+img {
+  width: 100px;
+}
