@@ -4,15 +4,19 @@
 
 {% block content %}
 
-<div>
-
-  {% if user.image_url %}
+<div class="user_page">
   <div>
-    <img src="{{ user.image_url }}"
-         alt="{{ user.full_name }}"
-    >
+
+    {% if user.image_url %}
+    <div>
+      <img src="{{ user.image_url }}"
+           alt="{{ user.full_name }}"
+      >
+    </div>
+    {% endif %}
+
   </div>
-  {% endif %}
+  
 
   <div>
     <h1>{{ user.full_name }}</h1>
@@ -27,6 +31,20 @@
               formmethod="POST">Delete
       </button>
     </form>
+
+    <h2>Posts</h2>
+
+    <ul class="posts_list_users_page">
+      {% for post in user.posts %}
+      <li>
+        <a class="posts_list" href="/posts/{{ post.id}}">{{ post.title }}</a>
+        <small>{{ post.formated_date }}</small>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="add_post_btn">
+      <a class="btn" href="/users/{{ user.id }}/posts/new">Add Post</a>
+    </div>
 
   </div>
 </div>

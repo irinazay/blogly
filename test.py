@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User
+from models import db, User, Post
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
 app.config['SQLALCHEMY_ECHO'] = False
@@ -38,7 +38,8 @@ class UserTestCase(TestCase):
             resp = client.get("/")
             html = resp.get_data(as_text=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<h1>Blogly Recent Posts</h1>', html)
 
     def test_show_users(self):
         with app.test_client() as client:
@@ -98,3 +99,78 @@ class UserTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<h1>Users</h1>", html)
+
+
+
+class PostTestCase(TestCase):
+    """Tests for views for Posts."""
+   
+    def setUp(self):
+        """Add sample post."""
+     
+        Post.query.delete()
+
+        post = Post(title="Titanic", content="This is my favorite movie")
+        db.session.add(post)
+        db.session.commit()
+
+        self.post_id = post.id
+
+
+    def tearDown(self):
+        """Clean up any fouled transaction."""
+
+        db.session.rollback()
+
+    def test_show_post(self):
+        with app.test_client() as client:
+            resp = client.get(f"/posts/{self.post_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Titanic", html)
+
+
+    # def test_show_post_form(self):
+    #     with app.test_client() as client:
+    #         resp = client.get("/users/user.id/posts/new")
+    #         html = resp.get_data(as_text=True)
+
+    #         self.assertEqual(resp.status_code, 200)
+    #         self.assertIn("Add Post for", html)
+
+    # def test_update_user(self):
+    #     with app.test_client() as client:
+    #         d = {"title": "Titanic", "content": "The best movie ever!"}
+    #         resp = client.post("/users/user.id/posts/new", data=d, follow_redirects=True)
+    #         html = resp.get_data(as_text=True)
+
+    #         self.assertEqual(resp.status_code, 200)
+    #         self.assertIn("<h2>Posts</h2>", html)     
+              
+    def test_edit_post(self):
+        with app.test_client() as client:
+            resp = client.get(f"/posts/{self.post_id}/edit")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Edit Post", html)
+
+    # def test_update_post(self):
+    #     with app.test_client() as client:
+    #         d = {"title": "Titanic", "content": "The best movie ever! Must watch!"}
+    #         resp = client.post(f"/posts/{self.post_id}/edit", data=d, follow_redirects=True)
+    #         html = resp.get_data(as_text=True)
+
+    #         self.assertEqual(resp.status_code, 200)
+    #         self.assertIn("Posts", html) 
+
+
+    # def test_delete_post(self):
+    #     with app.test_client() as client:
+    #         resp = client.post(f"/posts/{self.post_id}/delete", follow_redirects=True)
+    #         html = resp.get_data(as_text=True)
+
+    #         self.assertEqual(resp.status_code, 200)
+    #         self.assertIn("<h2>Posts</h2>", html)
+

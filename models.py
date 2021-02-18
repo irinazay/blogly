@@ -1,6 +1,8 @@
 """Models for Blogly."""
 
+import datetime
 from flask_sqlalchemy import SQLAlchemy
+
 
 db = SQLAlchemy()
 
@@ -15,6 +17,9 @@ class User(db.Model):
     last_name = db.Column(db.Text)
     image_url = db.Column(db.Text)
 
+    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
+
+
     @property
     def full_name(self):
         """Return full name of user."""
@@ -22,11 +27,28 @@ class User(db.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-def connect_db(app):
-    """Connect this database to provided Flask app.
+class Post(db.Model):
+    """Blog post."""
 
-    You should call this in your Flask app.
-    """
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text)
+    content = db.Column(db.Text)
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.datetime.now)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    @property
+    def formated_date(self):
+        """Return formated date."""
+
+        return self.created_at.strftime("%b %-d  %Y, %-I:%M %p")
+
+
+def connect_db(app):
+    """Connect database to Flask app."""
 
     db.app = app
     db.init_app(app)
