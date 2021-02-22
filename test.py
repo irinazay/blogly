@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User, Post
+from models import db, User, Post, Tag
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
 app.config['SQLALCHEMY_ECHO'] = False
@@ -173,4 +173,73 @@ class PostTestCase(TestCase):
 
     #         self.assertEqual(resp.status_code, 200)
     #         self.assertIn("<h2>Posts</h2>", html)
+    
+class TagTestCase(TestCase):
+    """Tests for views for Tags."""
 
+    def setUp(self):
+        """Add sample tag."""
+
+        Tag.query.delete()
+
+        tag = Tag(name="fun")
+        db.session.add(tag)
+        db.session.commit()
+
+        self.tag_id = tag.id
+
+    def tearDown(self):
+        """Clean up any fouled transaction."""
+
+        db.session.rollback()
+
+
+    def test_show_tags(self):
+        with app.test_client() as client:
+            resp = client.get("/tags")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('fun', html)
+
+    def test_show_tag_form(self):
+        with app.test_client() as client:
+            resp = client.get("/tags/new")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<h1>Create a tag</h1>', html)
+
+    def test_show_tag(self):
+        with app.test_client() as client:
+            resp = client.get(f"/tags/{self.tag_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("fun", html)        
+    
+    def test_edit_tag(self):
+        with app.test_client() as client:
+            resp = client.get(f"/tags/{self.tag_id}/edit")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<h1>Edit a tag</h1>", html) 
+
+
+    def test_update_tag(self):
+        with app.test_client() as client:
+            d = {"name": "daram"}
+            resp = client.post(f"/tags/{self.tag_id}/edit", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<h1>Tags</h1>", html)
+
+    def test_delete_tag(self):
+        with app.test_client() as client:
+            resp = client.post(f"/tags/{self.tag_id}/delete", follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<h1>Tags</h1>", html)

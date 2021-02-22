@@ -11,20 +11,34 @@
   <div >
     <label for="title">Title</label>
     <div>
-      <input id="title" name="title" value="{{ post.title }}">
+      <input name="title" value="{{ post.title }}">
     </div>
   </div>
 
   <div>
     <label for="content">Post Content</label>
     <div>
-      <textarea
-                id="content"
-                name="content">{{ post.content }}</textarea>
+      <textarea name="content">{{ post.content }}</textarea>
     </div>
   </div>
 
-
+  <div>
+    {% for tag in tags %}
+    <div>
+      <input 
+            class="check_boxes"
+            type="checkbox"
+             value="{{ tag.id }}"
+             id="tag_{{ tag.id }}"
+             {% if tag in post.tags %}checked{% endif %}
+             name="tags">
+      <label class="label_checkbox"for="tag_{{ tag.id }}">
+        {{ tag.name }}
+      </label>
+    </div>
+    {% endfor %}
+  </div>
+  
     <div>
       <a class="btn" href="/users/{{ post.user_id }}">
         Cancel
