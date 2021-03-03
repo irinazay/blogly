@@ -105,6 +105,7 @@ def users_delete(user_id):
     return redirect("/users")
 
 
+#############################################################################
 # POST ROUTES-----------------------------------------------------------------
 
 @app.route('/users/<int:user_id>/posts/new')
@@ -185,6 +186,7 @@ def posts_destroy(post_id):
 
     return redirect(f"/users/{post.user_id}")
 
+###################################################################
 # TAGS ROUTES----------------------------------------------------
 
 @app.route('/tags')
